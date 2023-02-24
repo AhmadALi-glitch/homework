@@ -22,17 +22,17 @@ Route::get('/', function () {
 
 
 
-// Route::post('/register', [UserController::class, 'register'])->name('register');
-// Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/register', [UserController::class, 'register'])->name('register');
+Route::post('/login', [UserController::class, 'login'])->name('login');
 
  
-// Route::get('show-product/{id}', [ProductsController::class, 'show']);
-// Route::get('get-products', [ProductsController::class, 'index']);
+Route::get('show-product/{id}', [ProductsController::class, 'show']);
+Route::get('get-products', [ProductsController::class, 'index']);
 
 
-// Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
-//     Route::post('store-product', [ProductsController::class, 'store']);
-//     Route::post('update-product/{id}', [ProductsController::class, 'update']);
-//     Route::get('delete-product/{id}', [ProductsController::class, 'delete']);
-// });
+    Route::post('store-product', [ProductsController::class, 'store']);
+    Route::post('update-product/{id}', [ProductsController::class, 'update']);
+    Route::get('delete-product/{id}', [ProductsController::class, 'delete']);
+});
