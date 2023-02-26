@@ -16,19 +16,21 @@ class UserController extends Controller
     public function register(Request $request)
     {
        
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'email' => 'required|email|umax:255',
-            'password' => 'required|min:10',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'string|max:255',
+        //     'email' => 'required|email|umax:255',
+        //     'password' => 'required|min:10',
+        // ]);
        
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json([
-                'error' => $errors
-            ], 400);
-        }
-        if ($validator->passes()) {
+        // if ($validator->fails()) {
+        //     $errors = $validator->errors();
+        //     return response()->json([
+        //         'error' => $errors
+        //     ], 400);
+        // }
+        // if ($validator->passes()) {
+
+            
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -41,7 +43,7 @@ class UserController extends Controller
                 'token_type' => 'Bearer',
             ]);
         }
-    }
+    
 
 
 
