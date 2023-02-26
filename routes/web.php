@@ -4,16 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ProductsController;
 use \App\Http\Controllers\UserController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+ 
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,17 +13,17 @@ Route::get('/', function () {
 
 
 
-Route::post('/register', [UserController::class, 'register'])->name('register');
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::match(['get', 'post'], '/register', [UserController::class, 'register'])->name('register');
+Route::match(['get', 'post'], '/login', [UserController::class, 'login'])->name('login');
 
  
-Route::get('show-product/{id}', [ProductsController::class, 'show']);
-Route::get('get-products', [ProductsController::class, 'index']);
+Route::get('show-product/{id}', [ProductsController::class, 'show'])->name('show-product');
+Route::get('get-products', [ProductsController::class, 'index'])->name('get-products');
 
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('store-product', [ProductsController::class, 'store']);
-    Route::post('update-product/{id}', [ProductsController::class, 'update']);
-    Route::get('delete-product/{id}', [ProductsController::class, 'delete']);
+    Route::post('store-product', [ProductsController::class, 'store'])->name('store-product');
+    Route::post('update-product/{id}', [ProductsController::class, 'update'])->name('update-product');
+    Route::get('delete-product/{id}', [ProductsController::class, 'delete'])->name('delete-product');
 });
