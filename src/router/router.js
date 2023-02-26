@@ -3,6 +3,7 @@ import * as VueRouter from "vue-router";
 import ProductsPage from "../components/ProductsPage.vue";
 import RegisterPage from "../components/RegisterPage.vue";
 import UserPage from "../components/UserPage.vue";
+import EditProductPage from "../components/EditProductPage.vue";
 
 const routes = [
     
@@ -19,6 +20,11 @@ const routes = [
     {
         path: "/user",
         component: UserPage
+    },
+
+    {
+        path: "/edit-product-page/:productId",
+        component: EditProductPage
     }
 
 ];

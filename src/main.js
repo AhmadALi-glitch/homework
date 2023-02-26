@@ -11,6 +11,15 @@ import '@quasar/extras/material-icons/material-icons.css'
 createApp(App)
 .use(router)
 .use(Quasar, {
-    plugins: {}
+    plugins: {},
+    config: {
+        brand: {
+            primary: '#dfb200',
+        },
+        notify: {},
+        loading: {},
+        loadingBar: {
+        }
+    }
 })
 .mount('#app')
