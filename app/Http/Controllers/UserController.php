@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+ 
 class UserController extends Controller
 {
 
@@ -48,21 +48,36 @@ class UserController extends Controller
 
     public function login(Request $request)
     { 
-        $user = User::where('email', $request->email)->first();
-     
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-                 return response()->json([
+
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json([
                 'message' => 'Invalid login details'
             ], 401);
         }
-
-
+        $user = auth()->user();
         $token = $user->createToken('user-token')->plainTextToken;
         $data = [
             'token' => $token,
             'user' => $user,
         ];
         return response()->json($data, 200);
+
+
+        // $user = User::where('email', $request->email)->first();
+     
+        // if (! $user || ! Hash::check($request->password, $user->password)) {
+        //          return response()->json([
+        //         'message' => 'Invalid login details'
+        //     ], 401);
+        // }
+
+
+        // $token = $user->createToken('user-token')->plainTextToken;
+        // $data = [
+        //     'token' => $token,
+        //     'user' => $user,
+        // ];
+        // return response()->json($data, 200);
       
     
 
