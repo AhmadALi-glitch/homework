@@ -15,15 +15,11 @@ Route::get('/', function () {
 
 Route::match(['get', 'post'], '/register', [UserController::class, 'register'])->name('register');
 Route::match(['get', 'post'], '/login', [UserController::class, 'login'])->name('login');
-
-
-Route::middleware(['JsonRequestMiddleware'])->group(function () {
     
-    Route::get('show-product/{id}', [ProductsController::class, 'show'])->name('show-product');
-    Route::get('get-products', [ProductsController::class, 'index'])->name('get-products');
-});
+Route::get('show-product/{id}', [ProductsController::class, 'show'])->name('show-product');
+Route::get('get-products', [ProductsController::class, 'index'])->name('get-products');
 
-Route::middleware(['auth:sanctum','JsonRequestMiddleware'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('store-product', [ProductsController::class, 'store'])->name('store-product');
     Route::post('update-product/{id}', [ProductsController::class, 'update'])->name('update-product');
