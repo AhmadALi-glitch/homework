@@ -26,15 +26,24 @@ export default {
         const email = ref('');
         const password = ref('');
 
-        axiosClient.post('/login', {
-            name: "Tset",
-            email: "test@example.com",
-            password: '12345test',
+        axiosClient.get('/token')
+        .then((result) =>{
+
+            axiosClient.post('/login', {
+                email: "testTesttest@example.com",
+                password: 'test12345test',
+    
+            }, {
+                headers: {
+                    'X-CSRF-TOKEN' : result.data
+                }
+            })
+            .then((result) => localStorage.setItem("login_token", result.data.token))
+            .catch((error) => console.log(error))
 
         })
-        .then((result) => {
-            console.log(result);
-        })
+        .catch((error) => console.log(error))
+
 
         return {
             email,

@@ -46,13 +46,27 @@ export default {
 
         const sendProductInfo = function() {
             
-            axiosClient.post("/store-product")
-            .then(() => {
-                console.log("asd");
+            axiosClient.get("/token")
+            .then((result) => {
+
+                axiosClient.post("/store-product", {
+                    name: "p1",
+                    price: "100$"
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN' : result.data,
+                        'Authorization': result.data
+                    }
+                })
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
             })
-            .catch(() => {
-                console.log('err');
-            })
+            
 
         }
 
