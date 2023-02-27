@@ -38,7 +38,10 @@ export default {
                     'X-CSRF-TOKEN' : result.data
                 }
             })
-            .then((result) => localStorage.setItem("login_token", result.data.token))
+            .then((result) => {
+                console.log(result.data)
+                localStorage.setItem("login_token", result.data.token)
+            })
             .catch((error) => console.log(error))
 
         })
