@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Http\Requests\StoreProductsRequest;
 use App\Http\Requests\UpdateProductsRequest;
+use App\Traits\ImageTrait;
 
 class ProductsController extends Controller
 {
-    
+    use ImageTrait;
     public function index()
     {
        $products = Products::all();
@@ -19,6 +20,8 @@ class ProductsController extends Controller
   
     public function store(StoreProductsRequest $request)
     {
+        $file_name= $this->saveImage($request->photo,'images/products');
+        $request->photo =  $file_name;
         $product = Products::create($request->all());
         return response()->json(['data' => $product, 'message' => 'Stored Successfully'], 200);
     }

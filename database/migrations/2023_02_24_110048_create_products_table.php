@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->double('price');
+            $table->string('photo')->nullable()->default(null);
             $table->timestamps();
         });
     }
