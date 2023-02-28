@@ -62,6 +62,7 @@ class UserController extends Controller
             'token' => $token,
             'user' => $user,
         ];
+
         return response()->json($data, 200);
 
 
