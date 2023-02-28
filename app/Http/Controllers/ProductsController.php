@@ -20,9 +20,15 @@ class ProductsController extends Controller
   
     public function store(StoreProductsRequest $request)
     {
-        $file_name= $this->saveImage($request->photo,'images/products');
-        $request->photo =  $file_name;
-        $product = Products::create($request->all());
+        // $file_name= $this->saveImage($request->photo,'images/');
+
+        $file_name = $request->file('photo')->store('image', 'public');
+
+        $product = Products::create([
+            'name' => $request->name,
+            'photo' => $file_name,
+            'price' => $request->price
+        ]);
         return response()->json(['data' => $product, 'message' => 'Stored Successfully'], 200);
     }
 
