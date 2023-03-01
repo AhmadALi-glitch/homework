@@ -10,7 +10,6 @@ const routes = [
     {
         path: "/",
         component: ProductsPage,
-        meta: { requiredAuth: true}
     },
     
     {
@@ -25,7 +24,8 @@ const routes = [
 
     {
         path: "/edit-product-page/:productId",
-        component: EditProductPage
+        component: EditProductPage,
+        meta: { requiredAuth: true}
     }
 
 ];

@@ -29,8 +29,9 @@ import { axiosClient } from '../axios';
 
 export default {
     components: {ProductCard},
+    emits: ['products-changed'],
 
-    setup() {
+    setup(props, {emit}) {
 
         const productName = ref('');
         const productPrice = ref('');
@@ -62,7 +63,8 @@ export default {
                 }
             })
             .then((result) => {
-                console.log(result)
+                // notify the products Component to re-fetch the products
+                emit('products-changed');
             })
             .catch((error) => console.log(error))
 

@@ -10,12 +10,13 @@
                 
                 <div class="col text-h4">{{ product.name }}</div>
                 <div class="col text-h6">{{ product.price }} $</div>
-                <img :src="imagesUrl + '/' + product.photo" alt="">
+                <img :src="imagesUrl + '/' + product.photo"  
+                style="max-width: 100px; min-width: 100px;">
                 
 
-                <q-card-actions  horizontal class="justify-around q-px-md">
+                <q-card-actions v-if="isAuth" horizontal class="justify-around q-px-md">
                     <q-btn flat round color="purple" icon="delete" @click="deleteCard(product.id)"/>
-                    <q-btn flat round color="purple" icon="edit" @click="updateCard(product.id)"/>
+                    <q-btn flat round color="purple" icon="edit" @click="editCard(product.id)"/>
                 </q-card-actions>
 
                 
@@ -28,8 +29,8 @@
 <script lang="ts">
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import axios from "axios";
 import { axiosClient } from "../axios";
+import { useQuasar } from "quasar";
 
 interface Product {
     id: any;
@@ -44,14 +45,17 @@ export default {
     props: {
         products: Array<Product>
     },
+    emits: ['product-deleted'],
 
-    setup(props) {
+    setup(props, {emit}) {
 
         const { push } = useRouter();
+        const { notify } = useQuasar();
 
         const products = ref(props.products);
-
         const imagesUrl = 'http://localhost:8000/storage';
+
+        const isAuth = localStorage.getItem("login_token") !== null;
 
         const deleteCard = function (productId: any) {
             axiosClient.get(`/delete-product/${productId}`, {
@@ -59,23 +63,35 @@ export default {
                     Authorization: `Bearer ${localStorage.getItem("login_token")}`
                 }
             })
-            .then((result) => {
-                console.log(result)
+            .then(() => {
+
+                // notify the products Component to re-fetch the products
+                emit('product-deleted', productId);
+
+                notify({
+                    message: "Product Deleted Succuessfully",
+                    color: "green"
+                })
             })
-            .catch((error) => console.log(error))
+            .catch(() => {
+                notify({
+                    message: "Something went wrong please try again",
+                    color: "red"
+                })
+            })
 
         }
 
-        const updateCard = function (productId: any) {
+        const editCard = function (productId: any) {
             push(`edit-product-page/${productId}`);
-            
         }
         
         return {
-            updateCard,
+            editCard,
             deleteCard,
             products,
-            imagesUrl
+            imagesUrl,
+            isAuth
         }
     }
 
