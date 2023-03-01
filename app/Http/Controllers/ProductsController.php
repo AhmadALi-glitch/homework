@@ -42,8 +42,17 @@ class ProductsController extends Controller
  
     public function update(UpdateProductsRequest $request, $id)
     {
+
+
+        $file_name = $request->file('photo')->store('image', 'public'); 
         $product = Products::find($id);
-        $product->update($request->all());
+        $product->update(
+            [
+            // $request->all()
+            'name' => $request->name,
+            'photo' =>$file_name,
+            'price' => $request->price]
+        );
         return response()->json(['data' => $product, 'message' => 'Updated Successfully'], 200);
     }
 
