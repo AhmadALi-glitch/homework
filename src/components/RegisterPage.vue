@@ -9,7 +9,7 @@
             </q-card-section>
 
             <q-card-section class="col-2">
-                <q-btn no-caps size="20px" color="purple">Register</q-btn>
+                <q-btn @click="register()" no-caps size="20px" color="purple">Register</q-btn>
             </q-card-section>
 
         </q-card>
@@ -19,6 +19,7 @@
 <script lang="ts">
 import { ref } from 'vue';
 import { axiosClient } from '../axios';
+import { useRouter } from 'vue-router';
 
 export default {
     
@@ -27,30 +28,30 @@ export default {
         const name = ref('');
         const email = ref('');
         const password = ref('');
+        const { push } =  useRouter();
 
-        axiosClient.get('/token')
-        .then((result) =>{
-
-            axiosClient.post('/register', {
-                name: "ahmad",
-                email: "testTesttest@example.com",
-                password: 'test12345test',
+        const register = function() {
     
-            }, {
-                headers: {
-                    'X-CSRF-TOKEN' : result.data
-                }
+            axiosClient.post('/register', {
+                name: name.value,
+                email: email.value,
+                password: password.value,
             })
-            .then((result) => console.log(result))
+            .then((result) => {
+                localStorage.setItem("login_token", result.data.access_token);
+                console.log(result.data.access_token)
+                push("/");
+            })
             .catch((error) => console.log(error))
 
-        })
-        .catch((error) => console.log(error))
+        }
+
 
         return {
             name,
             email,
-            password
+            password,
+            register
         }
 
     }

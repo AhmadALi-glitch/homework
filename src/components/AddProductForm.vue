@@ -6,12 +6,13 @@
 
         <q-form style="border:dashed purple 3px" class="bg-white justify-center q-gutter-md q-pa-md" v-if="productFormVisibility">
 
-            <q-input v-model="productName" color="purple" type="text" label="Product Name" />
-            <q-input v-model="productPrice" color="purple" type="text" label="Product Price" />
+            <q-input name="name" v-model="productName" color="purple" type="text" label="Product Name" />
+            <q-input name="price" v-model="productPrice" color="purple" type="text" label="Product Price" />
+            <q-input stack-label name="photo" v-model="productPhoto" type="file" label="Product Photo" />
             
             <div class="q-gutter-sm">
                 <q-btn @click="hideProductForm()" color="red" icon="close" />
-                <q-btn @click="sendProductInfo()" label="Save" type="submit" color="purple"/>
+                <q-btn @click="sendProductInfo()" label="Save" color="purple"/>
             </div>
 
         </q-form>
@@ -33,6 +34,7 @@ export default {
 
         const productName = ref('');
         const productPrice = ref('');
+        const productPhoto = ref('');
 
         const productFormVisibility = ref(false);
 
@@ -45,28 +47,24 @@ export default {
         }
 
         const sendProductInfo = function() {
-            
-            axiosClient.get("/token")
-            .then((result) => {
 
-                axiosClient.post("/store-product", {
-                    name: "p1",
-                    price: "100$"
-                }, {
-                    headers: {
-                        'X-CSRF-TOKEN' : result.data,
-                        'Authorization': result.data
-                    }
-                })
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
+            let formData = new FormData();
 
+            formData.append('name',  productName.value);
+            formData.append('price',  productPrice.value);
+            formData.append('photo',  productPhoto.value[0]);
+
+            console.log(formData)
+
+            axiosClient.post('/store-product', formData, {
+                headers:  {
+                    Authorization : `Bearer ${localStorage.getItem("login_token")}`
+                }
             })
-            
+            .then((result) => {
+                console.log(result)
+            })
+            .catch((error) => console.log(error))
 
         }
 
@@ -76,7 +74,8 @@ export default {
             productName,
             productPrice,
             hideProductForm,
-            sendProductInfo
+            sendProductInfo,
+            productPhoto
         }
     }
 }

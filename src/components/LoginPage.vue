@@ -8,7 +8,7 @@
             </q-card-section>
             
             <q-card-section class="col-4">
-                <q-btn no-caps size="20px" color="purple">Login</q-btn>
+                <q-btn no-caps size="20px" color="purple" @click="login()">Login</q-btn>
             </q-card-section>
 
         </q-card>
@@ -18,6 +18,8 @@
 <script lang="ts">
 import { ref } from 'vue';
 import { axiosClient } from '../axios';
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router';
 
 export default {
     
@@ -25,32 +27,31 @@ export default {
 
         const email = ref('');
         const password = ref('');
-
-        axiosClient.get('/token')
-        .then((result) =>{
-
-            axiosClient.post('/login', {
-                email: "testTesttest@example.com",
-                password: 'test12345test',
+        const { notify } = useQuasar();
+        const { push } = useRouter();
     
-            }, {
-                headers: {
-                    'X-CSRF-TOKEN' : result.data
-                }
-            })
-            .then((result) => {
-                console.log(result.data)
-                localStorage.setItem("login_token", result.data.token)
-            })
-            .catch((error) => console.log(error))
-
+        const login = function() {
+            axiosClient.post('/login', {
+            email: email.value,
+            password: password.value,
         })
-        .catch((error) => console.log(error))
+        .then((result) => {
+            localStorage.setItem("login_token", result.data.token);
+            push("/")
+        })
+        .catch((error) => {
+            notify({
+                message: error.response.statusText,
+                color: "red"
+            })
+        })
 
+        }
 
         return {
             email,
-            password
+            password,
+            login
         }
 
     }

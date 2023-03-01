@@ -9,7 +9,8 @@
 
                 
                 <div class="col text-h4">{{ product.name }}</div>
-                <div class="col text-h6">{{ product.price }}</div>
+                <div class="col text-h6">{{ product.price }} $</div>
+                <img :src="imagesUrl + '/' + product.photo" alt="">
                 
 
                 <q-card-actions  horizontal class="justify-around q-px-md">
@@ -27,11 +28,14 @@
 <script lang="ts">
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import axios from "axios";
+import { axiosClient } from "../axios";
 
 interface Product {
     id: any;
     name: string;
     price: string;
+    photo: string;
 }
 
 
@@ -47,8 +51,19 @@ export default {
 
         const products = ref(props.products);
 
+        const imagesUrl = 'http://localhost:8000/storage';
+
         const deleteCard = function (productId: any) {
-            //
+            axiosClient.get(`/delete-product/${productId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("login_token")}`
+                }
+            })
+            .then((result) => {
+                console.log(result)
+            })
+            .catch((error) => console.log(error))
+
         }
 
         const updateCard = function (productId: any) {
@@ -59,7 +74,8 @@ export default {
         return {
             updateCard,
             deleteCard,
-            products
+            products,
+            imagesUrl
         }
     }
 

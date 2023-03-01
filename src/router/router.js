@@ -10,6 +10,7 @@ const routes = [
     {
         path: "/",
         component: ProductsPage,
+        meta: { requiredAuth: true}
     },
     
     {
@@ -28,10 +29,20 @@ const routes = [
     }
 
 ];
-
 const router = VueRouter.createRouter({
-    history: VueRouter.createWebHashHistory(),
+    history: VueRouter.createWebHistory(),
     routes
 })
+
+router.beforeEach((to, _, next) => {
+    
+    if(to.meta.requiredAuth) {
+        if(!localStorage.getItem('login_token') && to.name != 'user') next({path: "/user"})
+        else next();
+    }
+    
+    next();
+})
+
 
 export { router };
