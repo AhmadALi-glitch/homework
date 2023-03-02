@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Http\Requests\StoreProductsRequest;
 use App\Http\Requests\UpdateProductsRequest;
-use App\Traits\ImageTrait;
 
 class ProductsController extends Controller
 {
-    use ImageTrait;
     public function index()
     {
        $products = Products::all();
@@ -44,11 +42,12 @@ class ProductsController extends Controller
     {
 
 
-        $file_name = $request->file('photo')->store('image', 'public'); 
+        $file_name = $request->file('photo')->store('image', 'public');
+        
         $product = Products::find($id);
+        
         $product->update(
             [
-            // $request->all()
             'name' => $request->name,
             'photo' =>$file_name,
             'price' => $request->price]
